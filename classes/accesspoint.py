@@ -9,12 +9,6 @@ class AccessPoint:
         self.download_firmware = False
         self.download_complete = False
         self.upgrade_complete = False
-    
-    def upgrade(self):
-        time.sleep(self.upgrade_time)
-
-    def download(self):
-        time.sleep(self.download_time)
 
     def check_in(self):
         if self.download_firmware==False and self.download_complete==False and self.upgrade_complete==False:
