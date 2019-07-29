@@ -1,33 +1,45 @@
-import time
+import run_upgrade
 from classes import gateway, repeater
+import time
 import threading
 
+num_of_gates = 2
+repeat_per_gate = 2
+network_arr = []
+thread_arr = []
 
-x = gateway.Gateway(22)
-
-def download(time_amount):
-    time.sleep(time_amount)
-
-def upgrade(time_amount):
-    time.sleep(time_amount)
-
-
-def run(ap):
-    t1 = threading.Thread(target = download, args=[ap.download_time])
-    t2 = threading.Thread(target = upgrade, args=[ap.upgrade_time])
-    while ap.upgrade_complete == False:
-        if t1.is_alive() == False and t2.is_alive() == False:
-            ap.check_in()
-        if ap.download_firmware == True and ap.download_complete == False and ap.upgrade_complete == False and t1.is_alive() == False:
-            t1.start()
-        if ap.download_firmware == True and ap.download_complete == True and ap.upgrade_complete == False and t2.is_alive() == False:
-            t2.start()
-        if ap.upgrade_complete == True:
-            break    
-        time.sleep(5)
+def thread_alive(the_thread):
+    alive = True 
+    while alive:
+        if the_thread.is_alive() == False:
+            end = time.perf_counter()
+            alive = False
 
 
-start = time.time()
-run(x)
-end = time.time()
+for i in range(num_of_gates):    
+    network_arr.append(gateway.Gateway(str(i+1), 'gateway'))
+    thread_arr.append(threading.Thread(target=run_upgrade.run, args=[network_arr[i]]))
+    for j in range(repeat_per_gate):
+        network_arr[i].repeaters.append(repeater.Repeater(str(i+1), 'repeater', str(j+1)))
+        network_arr[i].repeat_threads.append(threading.Thread(target=run_upgrade.run, args=[network_arr[i].repeaters[j]]))
+
+
+#<-start the clock->
+start = time.perf_counter()
+#<-start the clock->
+
+for i in range(num_of_gates):
+    thread_arr[i].start()
+    for j in network_arr[i].repeat_threads:
+        j.start()
+
+for i in range(num_of_gates):
+    thread_alive(thread_arr[i])
+    for j in range(repeat_per_gate):
+        thread_alive(network_arr[i].repeat_threads[j])
+
+#<-end the clock->
+end = time.perf_counter()
+#<-end the clock->
+
 print('total time - ', round(end-start, 2), 'mins')

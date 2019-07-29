@@ -1,6 +1,7 @@
 from classes import accesspoint
 
 class Repeater(accesspoint.AccessPoint):
-        def __init__(self, gateway_num):
+        def __init__(self, ident, AP_type, sub_ident):
             accesspoint.AccessPoint.__init__(self)
-            self.gateway_pointer = gateway_num
+            self.ident = ident + '.'+ sub_ident
+            self.AP_type = AP_type
