@@ -1,8 +1,7 @@
-from simulation_files import run_upgrade
+from simulation_files import run_upgrade, global_vars
 from classes import gateway, repeater
 import time
 import threading
-from simulation_files import global_vars
 
 def thread_alive(the_thread):
     alive = True 
