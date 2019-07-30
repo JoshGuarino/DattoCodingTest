@@ -1,6 +1,6 @@
 import random
 import time
-import global_vars
+from simulation_files import global_vars
 
 class AccessPoint:
     def __init__(self):

@@ -1,6 +1,6 @@
 import time
 import threading
-import global_vars
+from simulation_files import global_vars
 
 def download(time_amount):
     time.sleep(time_amount)
