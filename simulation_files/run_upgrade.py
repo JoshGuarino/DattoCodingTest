@@ -1,5 +1,4 @@
 import time
-from classes import gateway, repeater
 import threading
 import global_vars
 

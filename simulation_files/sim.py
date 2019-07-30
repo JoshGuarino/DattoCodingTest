@@ -1,4 +1,4 @@
-import run_upgrade
+from simulation_files import run_upgrade
 from classes import gateway, repeater
 import time
 import threading
